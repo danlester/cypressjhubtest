@@ -16,7 +16,9 @@ runs:
         
         echo `realpath python3`
         pip3 install jhub-client
-        echo CYPRESS_JHUB_CLIENT_PYTHON_PATH="`realpath python3`" >> $GITHUB_ENV
+        
+        # `realpath python3`
+        echo CYPRESS_JHUB_CLIENT_PYTHON_PATH="python3" >> $GITHUB_ENV
 
     - name: Checkout QHub for Cypress tests
       shell: bash
