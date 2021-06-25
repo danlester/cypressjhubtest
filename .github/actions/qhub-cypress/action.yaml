@@ -1,0 +1,40 @@
+name: 'Qhub Cypress'
+description: 'Run Cypress tests on the cloud site'
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Checkout QHub for Cypress tests
+      shell: bash
+      # Python is not needed. Also clone in cwd, not `~` because Cypress doesn't expand `~`.
+      run: |
+        git clone https://git@github.com/quansight/qhub.git
+        cd qhub
+        git fetch origin $QHUB_GH_BRANCH
+        git checkout $QHUB_GH_BRANCH
+
+    - name: Checkout State repo to get qhub-config.yaml
+      shell: bash
+      run: |
+        git clone https://$GITHUB_TOKEN@github.com/$QHUB_REPOSITORY_USER/$QHUB_REPOSITORY_NAME.git
+        cd $QHUB_REPOSITORY_NAME
+
+    - name: Calc Base URL, config file path, and example-user password
+      shell: bash
+      run: |
+        echo CYPRESS_BASE_URL="https://${QHUB_DOMAIN}/" >> $GITHUB_ENV
+        echo QHUB_CONFIG_PATH="`realpath ${QHUB_REPOSITORY_NAME}/qhub-config.yaml`" >> $GITHUB_ENV
+        echo CYPRESS_EXAMPLE_USER_PASSWORD="`cat ${QHUB_REPOSITORY_NAME}/QHUB_DEFAULT_PASSWORD`" >> $GITHUB_ENV
+
+    - name: npm install
+      shell: bash
+      working-directory: qhub/tests_e2e
+      run: npm install
+
+    - name: Cypress Run
+      shell: bash
+      run: cypress run
+      working-directory: qhub/tests_e2e
+
+
