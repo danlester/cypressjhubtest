@@ -12,7 +12,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   GITHUB_USERNAME: danlester
   QHUB_REPOSITORY_USER: danlester
-  QHUB_REPOSITORY_NAME: cypressjhubtest
+  QHUB_REPOSITORY_NAME: cypressjhubtest-config
   QHUB_PROJECT_NAME: qhubdsl
   QHUB_DOMAIN: qhubaws.natelester.com
   # The branch of QHub to run the test from
