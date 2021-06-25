@@ -1,0 +1,42 @@
+name: "Test on AWS"
+
+on:
+  workflow_dispatch:
+
+env:
+  # AWS Vars
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
+  # Used by QHub to automate the creation of the repository
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GITHUB_USERNAME: danlester
+  QHUB_REPOSITORY_USER: danlester
+  QHUB_REPOSITORY_NAME: cypressjhubtest
+  QHUB_PROJECT_NAME: qhubdsl
+  QHUB_DOMAIN: qhubaws.natelester.com
+  # The branch of QHub to run the test from
+  QHUB_GH_BRANCH: cypressjhubclient
+
+jobs:
+
+
+############## CYPRESS TESTS 
+
+  e2etests:
+    name: End to end Cypress tests
+    runs-on: ubuntu-latest
+    container: cypress/included:6.8.0
+    steps:
+      - uses: actions/checkout@v2
+      - id: qhub_cypress
+        uses: ./.github/actions/qhub-cypress
+      - name: Save Cypress screenshots and videos
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: e2e-cypress
+          path: |
+            qhub/tests_e2e/cypress/screenshots/
+            qhub/tests_e2e/cypress/videos/
+      
