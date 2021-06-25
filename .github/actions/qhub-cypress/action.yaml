@@ -10,6 +10,10 @@ runs:
       # Python is not needed. Also clone in cwd, not `~` because Cypress doesn't expand `~`.
       run: |
         echo `python3 --version`
+        
+        apt update
+        apt install python3-pip --assume-yes
+        
         echo `realpath python3`
         pip3 install jhub-client
         echo CYPRESS_JHUB_CLIENT_PYTHON_PATH="`realpath python3`" >> $GITHUB_ENV
